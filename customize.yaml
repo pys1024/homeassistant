@@ -1,0 +1,30 @@
+switch.room_lamp:
+  aihome_device: True
+  friendly_name: 大厅灯
+switch.bedroom_lamp:
+  aihome_device: True
+  friendly_name: 卧室灯
+switch.eggs_heater:
+  aihome_device: True
+  friendly_name: 煮蛋器
+switch.bath_heater:
+  aihome_device: True
+  friendly_name: 热水器
+switch.water_heater:
+  aihome_device: True
+  friendly_name: 饮水机
+switch.dresser_lamp:
+  aihome_device: True
+  friendly_name: 化妆台灯
+switch.passage_lamp:
+  aihome_device: True
+  friendly_name: 走廊灯
+switch.leave_home:
+  aihome_device: True
+  friendly_name: 出门
+switch.table_lamp:
+  aihome_device: True
+  friendly_name: 饭桌灯
+switch.washroom_lamp:
+  aihome_device: True
+  friendly_name: 卫生间灯

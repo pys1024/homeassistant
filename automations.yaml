@@ -1,0 +1,283 @@
+  - alias: "Boiled Eggs At 6:30-6:45"
+    trigger:
+      platform: time
+      at: '06:30:00'
+    action:
+      - service: switch.turn_on
+        entity_id: switch.eggs_heater
+      - delay: 00:15:00
+      - service: switch.turn_off
+        entity_id: switch.eggs_heater
+  - alias: "Open Bath Heater At 5:30-6:20"
+    trigger:
+      platform: time
+      at: '05:30:00'
+    action:
+      - service: switch.turn_on
+        entity_id: switch.bath_heater
+      - delay: 00:50:00
+      - service: switch.turn_off
+        entity_id: switch.bath_heater
+      - service: automation.turn_off
+        entity_id: automation.open_bath_heater_at_5_30_6_20
+  - alias: "Open Water Heater At 7:05-7:10"
+    trigger:
+      platform: time
+      at: '07:05:00'
+    action:
+      - service: switch.turn_on
+        entity_id: switch.water_heater
+      - delay: 00:05:00
+      - service: switch.turn_off
+        entity_id: switch.water_heater
+      - service: tts.baidu_say
+        data:
+          message: 热水已经好了，请记得喝水哟
+  - alias: "Open Room Lamp At 7:00"
+    trigger:
+      platform: time
+      at: '07:00:00'
+    action:
+      service: switch.turn_on
+      entity_id: switch.room_lamp
+  - alias: "Bus is comming"
+    trigger:
+      platform: numeric_state
+      entity_id: sensor.bus_arrialtime
+      value_template: '{{ states.sensor.bus_arrialtime.attributes["第1台"] }}'
+      below: 1.0
+    action:
+      - delay: 00:06:00
+      - service: tts.baidu_say
+        data:
+          message: 二零三路公交车快来了，下一辆预计还有十分钟到达
+        # data_template:
+        #   message: >
+        #     {% if states.sensor.bus_arrialtime.attributes["第1台"] | int < 10 %}
+        #     二零三路公交车快来啦
+        #     下一辆预计还有{{ states.sensor.bus_arrialtime.attributes["第1台"] | int }}分钟到达
+        #     {% endif %}
+  - alias: "Baidu tts"
+    trigger:
+      platform: time
+      at: '22:00:00'
+    action:
+      - service: tts.baidu_say
+        data:
+          message: "十点了，该准备睡觉了"
+  - alias: "Back home"
+    trigger:
+      - platform: state
+        entity_id: device_tracker.pys_xiaomi
+        from: 'not_home'
+        to: 'home'
+      - platform: state
+        entity_id: device_tracker.liu_iphone
+        from: 'not_home'
+        to: 'home'
+    condition:
+      condition: state
+      entity_id: switch.leave_home
+      state: 'on'
+    action:
+      - delay: '00:01:00'
+      - service: switch.turn_off
+        entity_id: switch.leave_home
+  - alias: "GPS leave home"
+    trigger:
+      - platform: state
+        entity_id: device_tracker.pys_xiaomi
+        from: 'home'
+        to: 'not_home'
+      - platform: state
+        entity_id: device_tracker.pys_xiaomi_phone
+        from: 'home'
+        to: 'not_home'
+      - platform: state
+        entity_id: device_tracker.liu_iphone
+        from: 'home'
+        to: 'not_home'
+      - platform: state
+        entity_id: device_tracker.iphone_2
+        from: 'home'
+        to: 'not_home'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: device_tracker.pys_xiaomi
+          state: 'not_home'
+        - condition: state
+          entity_id: device_tracker.pys_xiaomi_phone
+          state: 'not_home'
+        - condition: state
+          entity_id: device_tracker.iphone_2
+          state: 'not_home'
+        - condition: state
+          entity_id: device_tracker.liu_iphone
+          state: 'not_home'
+    action:
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: switch.water_heater
+            state: 'on'
+          - condition: state
+            entity_id: switch.bath_heater
+            state: 'on'
+          - condition: state
+            entity_id: switch.eggs_heater
+            state: 'on'
+          - condition: state
+            entity_id: switch.passage_lamp
+            state: 'on'
+          - condition: state
+            entity_id: switch.bedroom_lamp
+            state: 'on'
+          - condition: state
+            entity_id: switch.dresser_lamp
+            state: 'on'
+          - condition: state
+            entity_id: switch.room_lamp
+            state: 'on'
+          - condition: state
+            entity_id: switch.table_lamp
+            state: 'on'
+          - condition: state
+            entity_id: switch.washroom_lamp
+            state: 'on'
+      - service: notify.pys_email
+        data:
+          title: 离家提醒
+          message: 主人，家里有电器没有关闭哟
+  - alias: "Leave home"
+    trigger:
+      platform: state
+      entity_id: switch.leave_home
+      from: 'off'
+      to: 'on'
+    action:
+      - delay: '00:00:05'
+      - service: switch.turn_off
+        entity_id: switch.room_lamp
+      - delay: '00:00:01'
+      - service: switch.turn_off
+        entity_id: switch.bedroom_lamp
+      - delay: '00:00:01'
+      - service: switch.turn_off
+        entity_id: switch.table_lamp
+  - alias: "Take out garbage"
+    trigger:
+      platform: state
+      entity_id: swtich.leave_home
+      from: 'off'
+      to: 'on'
+    action:
+      - service: tts.baidu_say
+        data:
+          message: "您有垃圾需要倒哟，请记得带上"
+  - alias: "Guardian"
+    trigger:
+      platform: time
+      at: '00:00:00'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: 'device_tracer.pys_xiaomi'
+          state: not_home
+        - condition: state
+          entity_id: 'device_tracker.pys_xiaomi_phone'
+          state: not_home
+    action:
+      - service: automation.turn_off
+        entity_id: automation.open_room_lamp_at_7_00
+      - service: automation.turn_off
+        entity_id: automation.open_water_heater_at_7_05_7_10
+      - service: automation.turn_off
+        entity_id: automation.boiled_eggs_at_6_30_6_45
+      - service: automation.turn_off
+        entity_id: automation.open_bath_heater_at_5_30_6_20
+  - alias: "Report automations"
+    trigger:
+      platform: time
+      at: '22:00:00'
+    condition:
+      condition: or
+      conditions:
+        - condition: state
+          entity_id: 'device_tracker.pys_xiaomi'
+          state: home
+        - condition: zone
+          entity_id: 'device_tracker.pys_xiaomi_phone'
+          zone: zone.home
+    action:
+      service: tts.baidu_say
+      data_template:
+        message: >
+          晚上十点了.
+          {% if is_state('automation.open_room_lamp_at_7_00', 'on') %}
+          已为您预约明早7点的灯光.
+          {% else %}
+          明天将不会开灯，祝您睡个好觉.
+          {% endif %}
+          {% if is_state('automation.open_water_heater_at_7_05_7_10', 'on') %}
+          已为您预约明早的饮用热水, 记得要多喝热水哟.
+          {% endif %}
+          {% if is_state('automation.boiled_eggs_at_6_30_6_45', 'on') %}
+          已为您预约明天早上七点煮鸡蛋，请记得添加鸡蛋.
+          {% else %}
+          明天将不会煮鸡蛋，如果需要请记得打开预约.
+          {% endif %}
+          {% if is_state('automation.open_bath_heater_at_5_30_6_20', 'on') %}
+          已为您预约明早6点打开热水器.
+          祝您洗澡愉快
+          {% endif %}
+  - alias: "Auto turn off bath heater"
+    trigger:
+      platform: state
+      entity_id: switch.bath_heater
+      from: 'off'
+      to: 'on'
+    action:
+      - delay: '01:00:00'
+      - condition: state
+        entity_id: switch.bath_heater
+        state: 'on'
+      - service: tts.baidu_say
+        data:
+          message: "热水器已打开一小时，已为您自动关闭"
+      - service: switch.turn_off
+        entity_id: switch.bath_heater
+  - alias: "Auto turn off water heater"
+    trigger:
+      platform: state
+      entity_id: switch.water_heater
+      from: 'off'
+      to: 'on'
+    action:
+      - delay: '00:10:00'
+      - condition: state
+        entity_id: switch.water_heater
+        state: 'on'
+      - service: tts.baidu_say
+        data:
+          message: "饮水机已打开十分钟，已为您自动关闭"
+      - service: switch.turn_off
+        entity_id: switch.water_heater
+  - alias: "Auto turn off eggs heater"
+    trigger:
+      platform: state
+      entity_id: switch.eggs_heater
+      from: 'off'
+      to: 'on'
+    action:
+      - delay: '00:20:00'
+      - condition: state
+        entity_id: switch.eggs_heater
+        state: 'on'
+      - service: tts.baidu_say
+        data:
+          message: "煮蛋器已打开二十分钟，已为您自动关闭"
+      - service: switch.turn_off
+        entity_id: switch.eggs_heater

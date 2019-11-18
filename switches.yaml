@@ -1,0 +1,40 @@
+- platform: aliu24
+  name: 'Room Lamp'
+  addr: 0x46
+  id: 0
+- platform: aliu24
+  name: 'Bedroom Lamp'
+  addr: 0x99
+  id: 0
+- platform: aliu24
+  name: 'Eggs Heater'
+  addr: 0x2f
+  id: 1
+- platform: aliu24
+  name: 'Bath Heater'
+  addr: 0xc4
+  id: 0
+- platform: aliu24
+  name: 'Water Heater'
+  addr: 0x52
+  id: 0
+- platform: aliu24
+  name: 'Dresser Lamp'
+  addr: 0x58
+  id: 0
+- platform: aliu24
+  name: 'Passage Lamp'
+  addr: 0x3e
+  id: 0
+- platform: aliu24
+  name: 'Leave Home'
+  addr: 0x3e
+  id: 1
+- platform: aliu24
+  name: 'Table Lamp'
+  addr: 0x8b
+  id: 0
+- platform: aliu24
+  name: 'WashRoom Lamp'
+  addr: 0x6a
+  id: 0

@@ -1,0 +1,102 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+sensor: !include sensors.yaml
+switch: !include switches.yaml
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+homeassistant:
+  customize: !include customize.yaml
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+http:
+  # api_password: pys1024
+  #trusted_networks:
+  #  - 127.0.0.1
+  #  - ::1
+  #  - 192.168.5.0/24
+  base_url: luckyrosy-pl.cn
+  ssl_certificate: /home/homeassistant/.homeassistant/ssl_keys/2650853_luckyrosy-pl.cn_public.pem
+  ssl_key: /home/homeassistant/.homeassistant/ssl_keys/2650853_luckyrosy-pl.cn.key
+
+# Text to speech
+tts:
+  - platform: baidu
+    app_id: 17213916
+    api_key: rWL8Ul8Ogjk4Fq23OeKyuKho
+    secret_key: FtEWSDkWD0bniykOBRktwSxnMDBm3S0B
+    #speed：语速0-9（缺省5）
+    #pitch：语调0-9（缺省5）
+    #volume：音量0-15（缺省5）
+    #person：声音（0：女，1：男，3：百度合成，4：百度合成，缺省0）
+    speed: 5
+    pitch: 5
+    volume: 15
+    person: 0
+
+aihome:
+  platform:
+  - dueros
+  http:
+    expire_in_hours: 14400
+
+map:
+
+zone:
+  - name: Home
+    latitude: 30.5471
+    longitude: 104.0427
+    radius: 100
+    passive: false
+  - name: Company
+    latitude: 30.540361
+    longitude: 104.062592
+    radius: 50
+    passive: false
+  - name: Study Room
+    latitude: 30.549836
+    longitude: 104.058924
+    radius: 80
+    passive: false
+
+
+device_tracker:
+  - platform: ping
+    hosts:
+      pys_xiaomi: 192.168.0.103
+  - platform: ping
+    hosts:
+      liu_iphone: 192.168.0.102
+
+ios:
+
+#dlna:
+
+media_player:
+  - platform: vlc
+    name: VLC player
+  # - platform: gstreamer
+  #   name: Gstreamer player
+  # - platform: dlna_dmr
+  #   url: http://192.168.0.100:49494/description.xml
+  # - platform: mpd
+  #   host: 127.0.0.1
+
+
+notify:
+  - platform: smtp
+    name: pys_email
+    server: smtp.163.com
+    port: 994
+    timeout: 15
+    encryption: tls
+    username: 18780235396@163.com
+    password: aliu058209749
+    sender: 18780235396@163.com
+    sender_name: Aliu Home
+    recipient:
+      - 404162409@qq.com
+      - 2283745334@qq.com

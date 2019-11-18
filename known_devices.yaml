@@ -1,0 +1,24 @@
+
+pys_xiaomi:
+  hide_if_away: false
+  icon:
+  mac:
+  name: 小彭同学
+  picture:
+  track: true
+
+iphone_2:
+  hide_if_away: false
+  icon:
+  mac:
+  name: 柳
+  picture:
+  track: true
+
+liu_iphone:
+  hide_if_away: false
+  icon:
+  mac:
+  name: 小柳同学
+  picture:
+  track: true

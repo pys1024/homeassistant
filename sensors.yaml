@@ -1,0 +1,10 @@
+- platform: bus_arrivertime
+  name: bus_arrialtime
+  lineid: '002845139172'
+  linename: '203'
+  direction: '0'
+  stationname: '天府三街剑南大道口'
+  nextstationname: '民乐村'
+  lineno: '203'
+  targetorder: '4'
+  cityid: '007'

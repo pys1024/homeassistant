@@ -1,0 +1,8 @@
+{
+  "domain": "dlna",
+  "name": "dlna",
+  "documentation": "https://github.com/charleyzhu",
+  "dependencies": ["media_player"],
+  "codeowners": ["charleyzhu"],
+  "requirements": []
+}

@@ -1,0 +1,13 @@
+warm_water:
+  alias: 温水
+  sequence:
+  - data:
+      entity_id: switch.water_heater
+    service: switch.turn_on
+  - delay: 00:03:00
+  - data:
+      entity_id: switch.water_heater
+    service: switch.turn_off
+  - service: tts.baidu_say
+    data:
+      message: 温水已烧好，请记得喝水喔
